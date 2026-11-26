@@ -1,4 +1,4 @@
-# Math Arena v3 (v3.2)
+# Math Arena v3 (v3.3)
 
 A calm, step-by-step practice game for AMC 8 (Jan 24, 2027) and Math Kangaroo Level 3-4 (Mar 18, 2027), built as one
 web page (React + esbuild). The player types a nickname on the device; nothing else about him is stored or sent.
@@ -18,6 +18,36 @@ web page (React + esbuild). The player types a nickname on the device; nothing e
 Every file is under 3.5 MB (`tools/package.mjs` checks this) and there are fewer than 60 files. The packaging step also
 scrubs every file (and every file inside the zips) for internal hosts, tool names and paths, and fails on any hit.
 The service worker only handles its own files (and `kit/`), never `classic/` or `calm/`.
+
+## Secret Treasures (v3.3)
+
+18 hidden tokens to collect: Gold Skulltula tokens in the Hyrule look, golden beetles in Starlit Grove, gold stars in
+Classic. Every N tokens (parent setting, default 3) earn one Reward Ticket for a real-world reward from the parent's list.
+
+- **6 secrets to find** (subtle, one-time, a faint shimmer about every 20 s): a glint on the hub, three knocks on the
+  Comeback host, a lost treasure at the end of the temple path, a secret ocarina song (the existing secret songs count; the
+  ocarina is now in every look), three knocks on the shop sign, the Contest Day door.
+- **12 secrets to achieve**: finish each of the 5 Comeback trails, beat a temple guardian with no clues, play 3 and 7
+  days in a row (the longest run ever counts, so it never goes down), beat your mini-mock best, explain 10 answers in
+  words, a sprint with no blanks, 20 twin problems solved. Earlier play counts (credited when the Secrets page opens or
+  after the next quest, round or lesson).
+- **Top bars** show a small token counter; it opens the Secrets page ("House of Skulltula"): found count, a cryptic hint for
+  each unfound secret, progress bars, the next-ticket bar and My tickets.
+- **A ticket**: the chest opens, he chooses a reward, then a ticket card ("… · earned in Math Arena · Show a grown-up!")
+  with "Grown-up: approve", which asks for the PIN and marks it used.
+- **Weekly cap**: tickets per local Sun–Sat week across all three apps stay at or under the cap; over it, tokens wait
+  ("Your treasure chest is full this week. Your Skulltulas will wait for next week!").
+- **Parent corner › Rewards**: edit the list (emoji + text, up to 8), tokens per ticket (1–10), weekly cap (0–14), on/off,
+  every app's tickets with "Mark as used". Shared by Math Arena, Language Quest and Code Quest on this browser.
+- **Shared storage** (same origin, same design in all three apps): `familyApps.rewards.v1`
+  `{version:1, enabled, tokensPerTicket, weeklyCap, rewards:[{id,emoji,text}], updatedAt}` (defaults written only when
+  missing, re-read before every use) and `familyApps.tickets.v1` `[{id, app:"math", rewardId, rewardText, emoji, earnedAt,
+  status:"earned"|"used", usedAt}]` (read-modify-write, other apps' entries kept, newest 200). Found secrets and waiting
+  tokens are in Math Arena's own save (`progress.treasures`). Code: `src/treasure.js`, `src/treasure-ui.jsx`.
+- Tests: `test/treasure-unit.mjs`, `test/treasure-e2e.mjs`.
+
+Hero names from the classic save are read whether they were stored JSON-encoded or plain; a 1–2 letter name shows, and
+'""' (a skipped name) keeps "add your name" (`test/nickname-e2e.mjs`, with the v2 Realm 2 → Fire Temple save).
 
 ## Kangaroo Comeback (v3.2)
 
@@ -92,6 +122,7 @@ npm ci --registry https://registry.npmjs.org/      # react, react-dom, esbuild
 node tools/build-bank.mjs --review                 # bank/ -> src/bankdata.js (checks every item), dist/bank-review.txt
 node test/unit.mjs                                 # game rules, bank, migration, contest, path (all must pass)
 node test/contest-unit.mjs && node test/shop-unit.mjs && node test/fuzz.mjs   # contest, shop/secrets, 120 simulated quests
+node test/comeback-unit.mjs && node test/treasure-unit.mjs                      # Kangaroo Comeback, Secret Treasures
 node tools/build.mjs                               # -> dist/ (index.html, bank-<id>.js, kit/, sw.js, icons)
 ```
 Browser tests (need Playwright + Chromium): `test/quest-e2e.mjs` (setup, a full quest with a guardian, both screen sizes),

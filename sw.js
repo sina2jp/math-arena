@@ -1,7 +1,7 @@
 // Math Arena service worker: makes the game open offline and installable.
 // It only touches its own files (index.html, bank.js, the manifest, the icons), Google Fonts and ./kit/ (the art and music pack).
 // Every other request, especially ./classic/ and ./calm/, goes straight to the network as if this file did not exist.
-const VERSION = '8b6f36fe7a5e';
+const VERSION = '796903a5a762';
 const PREFIX = 'math-arena-';
 const CACHE = PREFIX + 'app-' + VERSION;
 const RUNTIME = PREFIX + 'runtime-v1';
