@@ -1,11 +1,11 @@
 // Math Arena service worker: makes the game open offline and installable.
 // It only touches its own files (index.html, bank.js, the manifest, the icons), Google Fonts and ./kit/ (the art and music pack).
 // Every other request, especially ./classic/ and ./calm/, goes straight to the network as if this file did not exist.
-const VERSION = 'bfb162e570c1';
+const VERSION = 'aaccd7de178c';
 const PREFIX = 'math-arena-';
 const CACHE = PREFIX + 'app-' + VERSION;
 const RUNTIME = PREFIX + 'runtime-v1';
-const PRECACHE = ['index.html', 'bank-f83e64706c-1.js', 'bank-f83e64706c-2.js', 'bank-f83e64706c-3.js', 'bank-f83e64706c-4.js', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png', 'icons/apple-touch-icon.png', 'icons/favicon-32.png', 'kit/fonts.css', 'kit/kit.js', 'kit/pack.js', 'kit/places/deku_tree_inside.js', 'kit/places/dodongo_cavern.js', 'kit/places/fire_temple.js', 'kit/places/forest_temple.js', 'kit/places/ganon_castle.js', 'kit/places/goron_city.js', 'kit/places/jabu_jabu.js', 'kit/places/kakariko.js', 'kit/places/kokiri.js', 'kit/places/lake_hylia.js', 'kit/places/lon_lon_ranch.js', 'kit/places/lost_woods.js', 'kit/places/map.js', 'kit/places/shadow_temple.js', 'kit/places/spirit_temple.js', 'kit/places/temple_of_time.js', 'kit/places/water_temple.js', 'kit/places/zoras_domain.js'];
+const PRECACHE = ['index.html', 'bank-f83e64706c-1.js', 'bank-f83e64706c-2.js', 'bank-f83e64706c-3.js', 'bank-f83e64706c-4.js', 'bank-4f35b45ed4-cx1.js', 'bank-4f35b45ed4-cx2.js', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png', 'icons/apple-touch-icon.png', 'icons/favicon-32.png', 'kit/fonts.css', 'kit/kit.js', 'kit/pack.js', 'kit/places/deku_tree_inside.js', 'kit/places/dodongo_cavern.js', 'kit/places/fire_temple.js', 'kit/places/forest_temple.js', 'kit/places/ganon_castle.js', 'kit/places/goron_city.js', 'kit/places/jabu_jabu.js', 'kit/places/kakariko.js', 'kit/places/kokiri.js', 'kit/places/lake_hylia.js', 'kit/places/lon_lon_ranch.js', 'kit/places/lost_woods.js', 'kit/places/map.js', 'kit/places/shadow_temple.js', 'kit/places/spirit_temple.js', 'kit/places/temple_of_time.js', 'kit/places/water_temple.js', 'kit/places/zoras_domain.js'];
 const SCOPE = new URL('./', self.location.href).href;
 const abs = (p) => new URL(p, SCOPE).href;
 const INDEX = abs('index.html');

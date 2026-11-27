@@ -1,4 +1,4 @@
-# Math Arena v3 (v3.4)
+# Math Arena v3 (v3.5)
 
 A calm, step-by-step practice game for AMC 8 (Jan 24, 2027) and Math Kangaroo Level 3-4 (Mar 18, 2027), built as one
 web page (React + esbuild). The player types a nickname on the device; nothing else about him is stored or sent.
@@ -18,6 +18,44 @@ web page (React + esbuild). The player types a nickname on the device; nothing e
 Every file is under 3.5 MB (`tools/package.mjs` checks this) and there are fewer than 60 files. The packaging step also
 scrubs every file (and every file inside the zips) for internal hosts, tool names and paths, and fails on any hit.
 The service worker only handles its own files (and `kit/`), never `classic/` or `calm/`.
+
+## Codex of the Sages + Lens of Truth (v3.5)
+
+One clear, consistent way to learn each key idea, linked to the words used in different classes, with mastery that is
+CONFIRMED, and careful reading as a core skill.
+
+- **Codex of the Sages** (Training camp › Codex, the Home weekly line, Today's quest): strands per Sage (Rauru: number
+  sense; Saria: patterns; Darunia: × ÷; Ruto: fractions; Impa: logic and counting; Nabooru: geometry; Zelda: word problems
+  and algebra; Sheik: the Lens of Truth, careful reading; neutral names in the other looks). 33 pages now (the concept map's
+  other ids are listed as "coming soon"). Every page teaches ONE main method in the same order: big idea (one sentence and
+  a picture) -> watch (an interactive model) -> try with me -> you try (Help ladder, a twin after a miss) -> same idea,
+  other names -> watch out -> exit check -> mini boss.
+- **Mastery model** (`src/codex/mastery.js`): a 3-item pre-check ("You already know this!" fast path); an exit check of 5
+  fresh items with no hints, incl. a transfer and an "explain why" item (4 of 5 = Learned); a failed exit re-teaches with a
+  DIFFERENT representation (e.g. bar model -> number line); memory checks at +1, +3, +7 days (2 fresh items each, mixed
+  with other ideas) -> Mastered; a miss sends it back to Learning; a grown-up can confirm on paper with the PIN ->
+  Confirmed. Status and dates per idea in the save (`progress.codex`). The Kangaroo Comeback trails get memory checks too.
+- **Hero's 4 Steps** everywhere (quests, practice, the Codex): Read (underline every number and condition, circle the
+  question) -> Draw (a line diagram = bar model) -> Solve (one line per step) -> Check. Codex clues use the same names.
+- **Lens of Truth** (`src/reading/`): a one-tap Read check before multi-sentence word problems (tap the question sentence,
+  pick what is asked from 3 paraphrases, or tap every number), adaptive (10 clean reads in a row -> 1 problem in 3; a misread
+  -> every problem again); "Read slowly" (one sentence at a time, read-aloud with word highlighting); the Lens button shows
+  trap words only after the first read; wrong choices tagged with the misread they come from give a "Lens moment" and are
+  logged; other misses ask "What happened?"; Sharp Eyes: 10 clean reads = +1 shard (2 a day); AMC sprint practice shows
+  each question alone for 10 seconds first.
+- **School sync** (Parent corner › School sync): a private code "MA1:" + base64(UTF-8 JSON) links his classes to the Codex
+  (this week's topics, other names, book quests, method notes). Stored only in this browser
+  (`mathArena.v3.schoolSync.v1`), never synced, never in backups, never in the app's code.
+- **Parent corner › Mastery**: status, dates and first-try accuracy per idea, the week's summary, ideas to re-learn, and a
+  Reading row (read-check accuracy, misreads this week, top trap types).
+- **Rewards** (Family Wallet): Learned = finishUnit, a mini boss or Mastered = beatBoss size, Confirmed = +1 shard,
+  Codex time counts as active learning time.
+- Problems: 545 new original problems and 128 mini-boss variants (929 answers in all), each solved again by independent
+  checkers (0 answer-key errors). All earlier problems are unchanged.
+- Fast first screen: the Codex problems live in their own bank file(s) and load after Home is on screen (a Codex screen
+  opened sooner waits a moment for them); the Hyrule pictures (kit/pack.js) are also asked for after the first screen. The
+  core bank files are byte-identical to v3.4's. Tests: `test/codex-unit.mjs`, `test/reading-unit.mjs`, `test/codex-e2e.mjs`,
+  `test/reading-app-e2e.mjs`, `test/reading-e2e.mjs`, `test/cx-cxw2.mjs`.
 
 ## Family Wallet (v3.4)
 
