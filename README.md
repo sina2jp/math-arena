@@ -1,4 +1,4 @@
-# Math Arena v3 (v3.5)
+# Math Arena v3 (v3.6)
 
 A calm, step-by-step practice game for AMC 8 (Jan 24, 2027) and Math Kangaroo Level 3-4 (Mar 18, 2027), built as one
 web page (React + esbuild). The player types a nickname on the device; nothing else about him is stored or sent.
@@ -18,6 +18,50 @@ web page (React + esbuild). The player types a nickname on the device; nothing e
 Every file is under 3.5 MB (`tools/package.mjs` checks this) and there are fewer than 60 files. The packaging step also
 scrubs every file (and every file inside the zips) for internal hosts, tool names and paths, and fails on any hit.
 The service worker only handles its own files (and `kit/`), never `classic/` or `calm/`.
+
+## Family Sync (v3.6)
+
+One central setup place for the family apps (the Family Hub page) and sync between the grown-up's laptop and his laptop,
+through the shared `src/family-sync.js` (byte-identical in every app, like `family-wallet.js`). Not connected = exactly the
+old behavior (no `familyApps.*` keys are written).
+- Keys: the School sync code is a family SETTING written by the grown-up (his book "done" marks stay local); the save,
+  nickname, Comeback start and mock results are PROGRESS; quest-in-progress, mute, keypad, migration, backups, AI usage and
+  every classic `mathArena.*` key stay on this laptop only (the classic save and the migration are untouched).
+- The grown-up PIN checks go to the family PIN when connected (`src/pin.js`); the Hub's look maps to the app's look.
+- A weekly summary for the parent's dashboard (`familyApps.summary.math.v1`): minutes, problems and accuracy, careful
+  reading, Codex learned / mastered / confirmed, the Comeback meter, mini-mock and Contest trail bests, last active.
+- Parent corner: a "☁ synced" dot ("sync paused" if the save were ever over the sync limit), a Family sync tab with the
+  Connect panel, and a practice-copy banner on a grown-up device. Updates from the Hub wait for a calm screen.
+- Save size: kept well under the 300 KB sync limit (trimming oldest detail first past 150 KB; a 6-month heavy-use test
+  stays under 200 KB). Tests: `test/family-sync-unit.mjs`, `test/family-sync-e2e.mjs` (two browsers with the mock server
+  in `tools/mock-server.mjs`).
+
+## The full Codex + Contest trail (v3.6)
+
+- **All 62 Codex pages** of the concept map are in (29 new: equations from stories, guess my rule, fraction of a number,
+  GCF × LCM, divisibility, long division, Venn diagrams, count both ends, arrangements and factorials, logic grids, angles,
+  parallel and perpendicular, symmetry, area on a grid, perimeter and area, flips/turns/slides, cubes and nets, units
+  digits, perfect squares, cycles with remainders, growing patterns, binary, smart computations, equivalent / mixed /
+  compared fractions, negatives on the number line, unit conversion, number puzzles). Every page has the same parts and the
+  full mastery model (quick check, exit check with a transfer and a "why" item, memory checks, a mini boss), and the Home
+  line and Today's quest pull them week by week.
+- **New hands-on models** for the Watch cards: a real protractor (inner and outer scales: "which 0 did you start
+  from?"), a line sorter, a mirror-fold and turn tool for symmetry, flip/turn/slide moves, a draggable Venn diagram (2 and
+  3 sets), a function machine, cube nets that fold (and building views), an area and perimeter grid (count, split, box,
+  join), binary flip cards and a units-digit / pattern cycle strip.
+- **Contest trail** (Codex › Contest trail): 21 trick cards, each a mini page with its own mastery check and ~10 new
+  contest problems, and 5 levels (Kangaroo 3-pointers, Kangaroo 4/5-pointers, AMC 8 questions 1–8, 9–16, 17–25). Each level
+  has its own 12-question mini mock; later runs draw fresh mixed mocks. Gate: the level's cards Mastered + 2 mini mocks
+  at the target. One main action on the map: "Continue: <next card or level>". Today's quest uses one trick card a day.
+- Problems: 703 new original problems (434 on the pages, 209 on the trick cards, 60 in the level mocks) and 116 mini-boss
+  variants (348 hits), each solved again by independent checkers: 0 answer-key errors. Earlier problems are unchanged.
+- **Faster first screen:** the Codex page content and the hands-on models now load after Home is on screen, like the Codex
+  problems (index.html is smaller than in v3.5). A Codex screen opened in the first moments shows "Opening the Codex…".
+- One function for every grown-up PIN check (`src/pin.js`) and one place that writes the save (`Store.persist`).
+- Market: a Lens of Truth look for the careful-reading button (cosmetic). Older bank items now get a specific Lens moment
+  too (the misread type is read from the wrong choice's note).
+- Tests: `test/trail-unit.mjs`, `test/trail-e2e.mjs`, `test/codex-pages-e2e.mjs` (every new page, both sizes),
+  `test/shots-v36.mjs` (the three looks), `test/cx-wa.mjs` … `test/cx-we.mjs` (the new models: mouse, touch, tap).
 
 ## Codex of the Sages + Lens of Truth (v3.5)
 
