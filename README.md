@@ -1,4 +1,4 @@
-# Math Arena v3 (v3.6)
+# Math Arena v3 (v3.7)
 
 A calm, step-by-step practice game for AMC 8 (Jan 24, 2027) and Math Kangaroo Level 3-4 (Mar 18, 2027), built as one
 web page (React + esbuild). The player types a nickname on the device; nothing else about him is stored or sent.
@@ -12,12 +12,37 @@ web page (React + esbuild). The player types a nickname on the device; nothing e
 | `manifest.webmanifest`, `sw.js`, `icons/` | Installable app (Add to Home Screen) and offline play after the first visit. |
 | `kit/` | The Hyrule art + music pack (fan art), packed into a few files: `kit.js` (music, sound effects, ocarina), `pack.js` (characters, bosses, items), `places/<scene>.js` (backgrounds, loaded per scene), `fonts.css` (fonts inlined), `CREDITS.md`. |
 | `classic/index.html` | The previous live version, rebuilt from its source, for rollback. It still reads the old `mathArena.*` save keys. |
-| `source.zip`, `source-kit-1.zip`, `source-kit-2.zip` | The full v3 source: code, build tools, tests, bank and docs in `source.zip`, the kit's pictures (`kit-src/img/`) in the `source-kit-*.zip` files. Unzip all of them into one folder. |
+| `source.zip`, `source-kit-1.zip`, `source-kit-2.zip` (+ `source-bank.zip`) | The full v3 source: code, build tools, tests, bank and docs in `source.zip` (v3.7: when that would pass 3.5 MB, the bank's sources `bank/` are in `source-bank.zip`), the kit's pictures (`kit-src/img/`) in the `source-kit-*.zip` files. Unzip all of them into one folder. |
 
 **Publishing:** copy everything in `dist/` to the repo root, replacing the old root files. Do **not** delete `calm/`.
 Every file is under 3.5 MB (`tools/package.mjs` checks this) and there are fewer than 60 files. The packaging step also
 scrubs every file (and every file inside the zips) for internal hosts, tool names and paths, and fails on any hit.
 The service worker only handles its own files (and `kit/`), never `classic/` or `calm/`.
+
+## Graduation (v3.7)
+
+"New learning = treasure. Repeats = practice only." Every level-like unit graduates once and then stays closed:
+
+- **Units** (one engine, `src/grad.js`, on the v3.5 mastery model in `progress.codex[unitId]`): Codex pages and trick
+  cards (page ids), the 11 quest levels (`q-<road>-<level>`: the Meadow and Forest starter roads and the Five Realms),
+  the Contest-trail levels (`tl-L1`..`tl-L5`) and the Comeback trails (`cb-<trail>`).
+- **Graduating** = passing the unit's test at 80% or better with no hints, one try each: the Codex exit check (4 of 5,
+  incl. a transfer and a "why" item), a quest level test (8 of 10; 4 of 5 on the starter roads), a trail level's mini
+  mock (10 of 12), a Comeback trail test (4 of 5). **Test out**: any not-yet-started unit offers the same test with
+  fresh items. Retakes never reuse the items of earlier tries (`rec.used`).
+- **Closed**: a graduated unit can't be started from any map; its items come back only in the +1/+3/+7-day memory
+  checks. A missed memory check reopens it as a re-teach; passing again pays 1 shard, once ever. A grown-up can
+  unlock a graduated unit for 24 hours of review (Parent corner → Diplomas); review pays nothing.
+- **Tokens** (`src/tokens.js`, family-wallet 1.2): `earnOnce` for graduation (2), re-graduation (1), each memory check
+  passed when due (1), mastered (1), a boss beaten the first time (3), a trail level cleared (3), a grown-up confirm (1),
+  a book quest (2), a mini mock's new best (1) / first time at target (2); `rupeesOnce` for correct answers (first
+  correct per item in 30 days); time in memory checks and review counts but earns no shards (`isRepeat`). Failed tests
+  pay nothing. The per-quest, per-lesson, per-practice, per-round and homework bonuses are gone. Wrong answers still
+  call `answer(false)` for the wallet's rapid-guess check. Classic (/classic/) never pays family tokens.
+- **Home**: the Graduation path ("Next up: …") and "My diplomas"; the Parent corner's Diplomas tab; the family summary
+  adds graduated counts per kind and this week's graduations.
+- **Modules**: family-sync.js 1.1.0 and family-wallet.js 1.2.0, byte-identical (sha256 pinned in
+  test/family-sync-unit.mjs); Math registers its own merge score (`src/family/score.js`).
 
 ## Family Sync (v3.6)
 
