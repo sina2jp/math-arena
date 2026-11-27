@@ -1,4 +1,4 @@
-# Math Arena v3 (v3.3)
+# Math Arena v3 (v3.4)
 
 A calm, step-by-step practice game for AMC 8 (Jan 24, 2027) and Math Kangaroo Level 3-4 (Mar 18, 2027), built as one
 web page (React + esbuild). The player types a nickname on the device; nothing else about him is stored or sent.
@@ -18,6 +18,35 @@ web page (React + esbuild). The player types a nickname on the device; nothing e
 Every file is under 3.5 MB (`tools/package.mjs` checks this) and there are fewer than 60 files. The packaging step also
 scrubs every file (and every file inside the zips) for internal hosts, tool names and paths, and fails on any hit.
 The service worker only handles its own files (and `kit/`), never `classic/` or `calm/`.
+
+## Family Wallet (v3.4)
+
+Math Arena now shares one wallet with Language Quest, Code Quest and Music Quest (same browser, same origin), through
+`src/family-wallet.js`: one framework-free file that every family app copies unchanged (its header documents the
+storage keys, the rules and the API; its unit tests run with `node test/family-wallet.test.cjs`).
+
+- **Shards**: Math Arena earns Wisdom (Language Quest Courage, Code Quest Power, Music Quest Song). A reward costs a full
+  set: by default 3 shards from each app in the set (the parent can switch to "any app", 3 per app in the set, and pick
+  which apps are in the set). Claiming spends the shards and adds a ticket; a grown-up approves it with the PIN.
+- **Earning in Math Arena**: every 10 active minutes on a learning screen (quests, Training camp, the Comeback, Contest
+  Day; never Home, the market or settings; only while the page is visible and he tapped in the last minute; at most 6 a
+  day); +2 for a finished quest (3+ answers), Training camp lesson, Comeback lesson or practice, contest round or mini
+  mock; +3 for a beaten temple guardian or Comeback mini boss; +1 for a problem solved after a miss or a clue (3 a day);
+  +1 per Gold Skulltula (each secret, which replaces "3 tokens = a ticket"); +1 at every 3-day streak.
+- **Shared rupees**: +1 per correct answer (at most 20 per quest or practice round), +10 per finished unit, +25 per boss,
+  +50 on a "Triforce Day" (shards in every app of the set that day). 3+ wrong answers within 5 seconds pause earning for
+  a minute. The in-quest rupee count and the rank keep Math Arena's own lifetime total, so spending never lowers a rank.
+- **The Hyrule Market** (My progress › Shop): one shared catalog of cosmetic and creative items (Home backgrounds,
+  buddies, Navi colors, Hero's Room trophies, Home music, titles, and per-app items such as Math Arena arena skins).
+  Math Arena's tunics and shield are still sold there. A weekly new item, "Save for this" (a goal bar on Home), the
+  Hero's Room showcase, and "You can afford X!". Nothing buys a learning shortcut; nothing is random.
+- **Top bar**: a mini Triforce (plus the note) with the shard counts and rupees; it opens the Treasure Wallet (Triforce
+  progress, rupees, the goal, Today, Claim a reward, My tickets, and the Secrets tab, House of Skulltula).
+- **Parent corner › Rewards**: the wallet settings, the reward list with costs, a ledger of the last 50 events, a weekly
+  report, Mark as used and a manual adjust with a reason.
+- **Migration (once)**: waiting Skulltula tokens become Wisdom shards, unspent rupees join the shared balance, and items
+  bought in the old shop carry over and stay worn. Nothing is written at load when there is nothing to move.
+- Code: `src/family-wallet.js` (shared), `src/wallet.jsx` (Math Arena's glue). Tests: `test/treasure-e2e.mjs`.
 
 ## Secret Treasures (v3.3)
 
